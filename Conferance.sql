@@ -3,6 +3,11 @@
 
 -- tables
 -- Table: Adresses
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Adresses')
+    DROP TABLE Adresses
+GO
+
 CREATE TABLE Adresses (
     AdressID int  NOT NULL,
     Country nvarchar(15)  NOT NULL,
@@ -17,6 +22,11 @@ CREATE INDEX AdressID on Adresses (AdressID ASC)
 ;
 
 -- Table: Clients
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Clients')
+    DROP TABLE Clients
+GO
+
 CREATE TABLE Clients (
     ClientID int  NOT NULL,
     CompanyID int  NULL,
@@ -30,18 +40,28 @@ CREATE INDEX ClientID on Clients (ClientID ASC,CompanyID ASC)
 ;
 
 -- Table: Companies
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Companies')
+    DROP TABLE Companies
+GO
+
 CREATE TABLE Companies (
     CompanyID int  NOT NULL,
     CompanyName nvarchar(20)  NOT NULL,
     AdressID int  NOT NULL,
     NIP nvarchar(30)  NOT NULL,
-    CONSTRAINT Companies_pk PRIMARY KEY  (CompanyID)
+    CONSTRAINT Companies_pk PRIMARY KEY CLUSTERED (CompanyID ASC)
 );
 
 CREATE INDEX Companies_idx_1 on Companies (CompanyID ASC)
 ;
 
 -- Table: ConfDayRegistrations
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConfDayRegistrations')
+    DROP TABLE ConfDayRegistrations
+GO
+
 CREATE TABLE ConfDayRegistrations (
     ConfDayRegistrationID int  NOT NULL,
     ParticipantID int  NOT NULL,
@@ -53,6 +73,11 @@ CREATE INDEX ConfDayRegistrations_idx_1 on ConfDayRegistrations (ConfDayRegistra
 ;
 
 -- Table: ConfDayReservations
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConfDayReservations')
+    DROP TABLE ConfDayReservations
+GO
+
 CREATE TABLE ConfDayReservations (
     ConfDayReservationID int  NOT NULL,
     ClientID int  NOT NULL,
@@ -68,6 +93,11 @@ CREATE INDEX ConfDayReservations_idx_1 on ConfDayReservations (ConfDayReservatio
 ;
 
 -- Table: Conference
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Conference')
+    DROP TABLE Conference
+GO
+
 CREATE TABLE Conference (
     ID_Conference int  NOT NULL,
     Name varchar(50)  NOT NULL,
@@ -79,6 +109,11 @@ CREATE INDEX ID_Conference on Conference (ID_Conference ASC)
 ;
 
 -- Table: ConferenceDays
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConferenceDays')
+    DROP TABLE ConferenceDays
+GO
+
 CREATE TABLE ConferenceDays (
     ConfDayID int  NOT NULL,
     ConfID int  NOT NULL,
@@ -92,6 +127,11 @@ CREATE INDEX ConferenceDays_idx_1 on ConferenceDays (ConfDayID ASC)
 ;
 
 -- Table: Discounts
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Discounts')
+    DROP TABLE Discounts
+GO
+
 CREATE TABLE Discounts (
     DiscountID int  NOT NULL,
     ConfDayID int  NOT NULL,
@@ -105,6 +145,11 @@ CREATE INDEX Discounts_idx_1 on Discounts (DiscountID ASC)
 ;
 
 -- Table: Participants
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Participants')
+    DROP TABLE Participants
+GO
+
 CREATE TABLE Participants (
     ParticipantID int  NOT NULL,
     ClientID int  NOT NULL,
@@ -119,6 +164,11 @@ CREATE INDEX Participants_idx_1 on Participants (ParticipantID ASC)
 ;
 
 -- Table: WorkshopRegistrations
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'WorkshopRegistrations')
+    DROP TABLE WorkshopRegistrations
+GO
+
 CREATE TABLE WorkshopRegistrations (
     WorkshopRegID int  NOT NULL,
     WorkshopReservID int  NOT NULL,
@@ -131,6 +181,11 @@ CREATE INDEX WorkshopRegistrations_idx_1 on WorkshopRegistrations (WorkshopRegID
 ;
 
 -- Table: WorkshopReservations
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'WorkshopReservations')
+    DROP TABLE WorkshopReservations
+GO
+
 CREATE TABLE WorkshopReservations (
     WorkshopReservID int  NOT NULL,
     WorkshopID int  NOT NULL,
@@ -145,6 +200,11 @@ CREATE INDEX WorkshopReservations_idx_1 on WorkshopReservations (WorkshopReservI
 ;
 
 -- Table: Workshops
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Workshops')
+    DROP TABLE Workshops
+GO
+
 CREATE TABLE Workshops (
     WorkshopID int  NOT NULL,
     ConfDayID int  NOT NULL,
