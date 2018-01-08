@@ -9,7 +9,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Adresses (
-    AdressID int  NOT NULL,
+    AdressID int  NOT NULL UNIQUE,
     Country nvarchar(15)  NOT NULL,
     PostalCode nvarchar(6)  NOT NULL,
     City nvarchar(20)  NOT NULL,
@@ -29,11 +29,11 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Clients (
-    ClientID int  NOT NULL,
+    ClientID int  NOT NULL UNIQUE,
     CompanyID int  NULL,
-    Login nchar(10)  NOT NULL,
+    Login nchar(10)  NOT NULL UNIQUE,
     Password nvarchar(255)  NOT NULL,
-    Mail varchar(60)  NOT NULL,
+    Mail varchar(60)  NOT NULL UNIQUE,
     CONSTRAINT Clients_pk PRIMARY KEY  (ClientID),
 	CONSTRAINT PostalCode_clength_check CHECK (Mail like '%_@_%_._%'),
 );
@@ -48,10 +48,10 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Companies (
-    CompanyID int  NOT NULL,
+    CompanyID int  NOT NULL UNIQUE,
     CompanyName nvarchar(20)  NOT NULL,
     AdressID int  NOT NULL,
-    NIP nvarchar(30)  NOT NULL,
+    NIP nvarchar(30)  NOT NULL UNIQUE,
     CONSTRAINT Companies_pk PRIMARY KEY CLUSTERED (CompanyID ASC),
 	CONSTRAINT NIP_format_check CHECK (NIP like '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]')
 );
@@ -66,10 +66,11 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConfDayRegistrations (
-    ConfDayRegistrationID int  NOT NULL,
+    ConfDayRegistrationID int  NOT NULL UNIQUE,
     ParticipantID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
-    CONSTRAINT ConfDayRegistrations_pk PRIMARY KEY  (ConfDayRegistrationID)
+    CONSTRAINT ConfDayRegistrations_pk PRIMARY KEY  (ConfDayRegistrationID),
+	CONSTRAINT Participant_Reserv_unique UNIQUE (ConfDayReservationID, ParticipantID)
 );
 
 CREATE INDEX ConfDayRegistrations_idx_1 on ConfDayRegistrations (ConfDayRegistrationID ASC)
@@ -82,7 +83,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConfDayReservations (
-    ConfDayReservationID int  NOT NULL,
+    ConfDayReservationID int  NOT NULL UNIQUE,
     ClientID int  NOT NULL,
     ConfDayID int  NOT NULL,
     NumSeats int  NOT NULL,
@@ -104,7 +105,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Conference (
-    ID_Conference int  NOT NULL,
+    ID_Conference int  NOT NULL UNIQUE,
     Name varchar(50)  NOT NULL,
     AdressID int  NOT NULL,
 	StudentDiscount int NOT NULL,
@@ -121,7 +122,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConferenceDays (
-    ConfDayID int  NOT NULL,
+    ConfDayID int  NOT NULL UNIQUE,
     ConfID int  NOT NULL,
     Date date  NOT NULL,
     Price float  NOT NULL,
@@ -140,7 +141,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Discounts (
-    DiscountID int  NOT NULL,
+    DiscountID int  NOT NULL UNIQUE,
     ConfDayID int  NOT NULL,
     DiscountStartDate date  NOT NULL,
     DiscountEndDate date  NOT NULL,
@@ -160,12 +161,12 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Participants (
-    ParticipantID int  NOT NULL,
+    ParticipantID int  NOT NULL UNIQUE,
     ClientID int  NOT NULL,
     FirstName nvarchar(20)  NOT NULL,
     LastName nvarchar(20)  NOT NULL,
     AdressID int  NOT NULL,
-    StudentCardID int  NULL,
+    StudentCardID int  NULL UNIQUE,
     CONSTRAINT Participants_pk PRIMARY KEY (ParticipantID),
 	CONSTRAINT FirstName_Format CHECK (FirstName NOT LIKE '%[^a-zA-Z,.\-\ ]%'),
 	CONSTRAINT LastName_Format CHECK (LastName NOT LIKE '%[^a-zA-Z,.\-\ ]%')
@@ -181,11 +182,12 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE WorkshopRegistrations (
-    WorkshopRegID int  NOT NULL,
+    WorkshopRegID int  NOT NULL UNIQUE,
     WorkshopReservID int  NOT NULL,
     ParticipantID int  NOT NULL,
     ConfDayRegistrationID int  NOT NULL,
-    CONSTRAINT WorkshopRegistrations_pk PRIMARY KEY  (WorkshopRegID)
+    CONSTRAINT WorkshopRegistrations_pk PRIMARY KEY  (WorkshopRegID),
+	CONSTRAINT Participant_Reserv_unique UNIQUE (WorkshopRegID, ParticipantID)
 );
 
 CREATE INDEX WorkshopRegistrations_idx_1 on WorkshopRegistrations (WorkshopRegID ASC)
@@ -198,7 +200,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE WorkshopReservations (
-    WorkshopReservID int  NOT NULL,
+    WorkshopReservID int  NOT NULL UNIQUE,
     WorkshopID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
     NumReservs int  NOT NULL,
@@ -219,7 +221,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Workshops (
-    WorkshopID int  NOT NULL,
+    WorkshopID int  NOT NULL UNIQUE,
     ConfDayID int  NOT NULL,
     Name nvarchar(40)  NOT NULL,
     Seats int  NOT NULL,
