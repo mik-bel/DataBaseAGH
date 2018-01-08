@@ -88,8 +88,8 @@ CREATE TABLE ConfDayReservations (
     ConfDayID int  NOT NULL,
     NumSeats int  NOT NULL,
     ReservationDate date  NOT NULL,
-    PaidPrice float  NOT NULL,
-    NumStudents int  NOT NULL,
+    PaidPrice float  NOT NULL DEFAULT 0,
+    NumStudents int  NOT NULL DEFAULT 0,
     CONSTRAINT ConfDayReservations_pk PRIMARY KEY  (ConfDayReservationID),
 	CONSTRAINT NumSeats_num_ckeck CHECK (NumSeats>0),
 	CONSTRAINT NumStudents_not_more_then_NumSeats_check CHECK (NumStudents<=NumSeats)
@@ -108,7 +108,7 @@ CREATE TABLE Conference (
     ID_Conference int  NOT NULL UNIQUE,
     Name varchar(50)  NOT NULL,
     AdressID int  NOT NULL,
-	StudentDiscount int NOT NULL,
+	StudentDiscount int NOT NULL DEFAULT 0,
     CONSTRAINT Conference_pk PRIMARY KEY  (ID_Conference)
 );
 
@@ -145,7 +145,7 @@ CREATE TABLE Discounts (
     ConfDayID int  NOT NULL,
     DiscountStartDate date  NOT NULL,
     DiscountEndDate date  NOT NULL,
-    Discount float  NOT NULL,
+    Discount float  NOT NULL DEFAULT 0,
     CONSTRAINT Discounts_pk PRIMARY KEY  (DiscountID),
 	CONSTRAINT Start_End_Discount_Date_check CHECK (DiscountStartDate<DiscountEndDate),
 	CONSTRAINT Discount_format_check CHECK (Discount between 1 and 99)
@@ -163,10 +163,10 @@ GO
 CREATE TABLE Participants (
     ParticipantID int  NOT NULL UNIQUE,
     ClientID int  NOT NULL,
-    FirstName nvarchar(20)  NOT NULL,
-    LastName nvarchar(20)  NOT NULL,
+    FirstName nvarchar(20)  NOT NULL DEFAULT 'Kamil',
+    LastName nvarchar(20)  NOT NULL DEFAULT 'Sokolowski',
     AdressID int  NOT NULL,
-    StudentCardID int  NULL UNIQUE,
+    StudentCardID int  NULL UNIQUE DEFAULT 0,
     CONSTRAINT Participants_pk PRIMARY KEY (ParticipantID),
 	CONSTRAINT FirstName_Format CHECK (FirstName NOT LIKE '%[^a-zA-Z,.\-\ ]%'),
 	CONSTRAINT LastName_Format CHECK (LastName NOT LIKE '%[^a-zA-Z,.\-\ ]%')
@@ -205,7 +205,7 @@ CREATE TABLE WorkshopReservations (
     ConfDayReservationID int  NOT NULL,
     NumReservs int  NOT NULL,
     ReservationDate date  NOT NULL,
-    NumStudents int  NOT NULL,
+    NumStudents int  NOT NULL DEFAULT 0,
     CONSTRAINT WorkshopReservations_pk PRIMARY KEY  (WorkshopReservID),
 	CONSTRAINT NumReservs_check CHECK (NumReservs > 0),
 	CONSTRAINT NumSrudent_not_greater_then_Reservs_ckeck CHECK (NumStudents <= NumReservs)
