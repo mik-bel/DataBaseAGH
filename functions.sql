@@ -1,21 +1,21 @@
-IF OBJECT_ID('Workshop_Free_Seats') is not null
-DROP FUNCTION Worshop_Free_Seats;
+IF OBJECT_ID('WorkshopFreeSeats') is not null
+DROP FUNCTION WorshopFreeSeats;
 GO
 
-IF OBJECT_ID('ConfDay_Free_Seats') is not null
-DROP FUNCTION ConfDay_Free_Seats;
+IF OBJECT_ID('ConfDayFreeSeats') is not null
+DROP FUNCTION ConfDayFreeSeats;
 GO 
 
-IF OBJECT_ID('ConfDay_Reservation_Free_Seats') is not null
-DROP FUNCTION ConfDay_Reservation_Free_Seats;
+IF OBJECT_ID('ConfDayReservationFreeSeats') is not null
+DROP FUNCTION ConfDayReservationFreeSeats;
 GO
 
-IF OBJECT_ID('Workshop_Reservation_Free_Seats') is not null
-DROP FUNCTION Workshop_Reservation_Free_Seats;
+IF OBJECT_ID('WorkshopReservationFreeSeats') is not null
+DROP FUNCTION WorkshopReservationFreeSeats;
 GO 
 
 
-CREATE FUNCTION ConfDay_Free_Seats(@CDayID int)
+CREATE FUNCTION ConfDayFreeSeats(@CDayID int)
 		RETURNS int
 		AS
 		BEGIN
@@ -40,7 +40,7 @@ CREATE FUNCTION ConfDay_Free_Seats(@CDayID int)
 		END
 GO
 
-CREATE FUNCTION Workshop_Free_Seats(@WorkshopID int)
+CREATE FUNCTION WorkshopFreeSeats(@WorkshopID int)
 		RETURNS int
 		AS 
 		BEGIN
@@ -65,7 +65,7 @@ CREATE FUNCTION Workshop_Free_Seats(@WorkshopID int)
 		END
 GO
 
-CREATE FUNCTION ConfDay_Reservation_Free_Seats(@ReservationID int)
+CREATE FUNCTION ConfDayReservationFreeSeats(@ReservationID int)
 		RETURNS int
 		AS 
 		BEGIN
@@ -90,7 +90,7 @@ CREATE FUNCTION ConfDay_Reservation_Free_Seats(@ReservationID int)
 		END
 GO 
 
-CREATE FUNCTION Workshop_Reservation_Free_Seats(@ReservationID int)
+CREATE FUNCTION WorkshopReservationFreeSeats(@ReservationID int)
 		RETURNS int
 		AS 
 		BEGIN

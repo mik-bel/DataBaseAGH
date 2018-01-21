@@ -6,7 +6,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Adresses (
-    AdressID int  NOT NULL UNIQUE,
+    AdressID int IDENTITY(1,1) NOT NULL UNIQUE,
     Country nvarchar(15)  NOT NULL,
     PostalCode nvarchar(6)  NOT NULL,
     City nvarchar(20)  NOT NULL,
@@ -26,7 +26,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Clients (
-    ClientID int  NOT NULL UNIQUE,
+    ClientID int IDENTITY(1,1) NOT NULL UNIQUE,
     CompanyID int  NULL,
     Login nchar(10)  NOT NULL UNIQUE,
     Password nvarchar(255)  NOT NULL,
@@ -45,7 +45,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Companies (
-    CompanyID int  NOT NULL UNIQUE,
+    CompanyID int IDENTITY(1,1) NOT NULL UNIQUE,
     CompanyName nvarchar(20)  NOT NULL,
     AdressID int  NOT NULL,
     NIP nvarchar(30)  NOT NULL UNIQUE,
@@ -63,7 +63,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConfDayRegistrations (
-    ConfDayRegistrationID int  NOT NULL UNIQUE,
+    ConfDayRegistrationID int IDENTITY(1,1) NOT NULL UNIQUE,
     ParticipantID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
     CONSTRAINT ConfDayRegistrations_pk PRIMARY KEY  (ConfDayRegistrationID),
@@ -80,7 +80,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConfDayReservations (
-    ConfDayReservationID int  NOT NULL UNIQUE,
+    ConfDayReservationID int IDENTITY(1,1) NOT NULL UNIQUE,
     ClientID int  NOT NULL,
     ConfDayID int  NOT NULL,
     NumSeats int  NOT NULL,
@@ -102,14 +102,14 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Conference (
-    ID_Conference int  NOT NULL UNIQUE,
+    ConferenceID int IDENTITY(1,1)  NOT NULL UNIQUE,
     Name varchar(50)  NOT NULL,
     AdressID int  NOT NULL,
 	StudentDiscount int NOT NULL DEFAULT 0,
-    CONSTRAINT Conference_pk PRIMARY KEY  (ID_Conference)
+    CONSTRAINT Conference_pk PRIMARY KEY  (ConferenceID)
 );
 
-CREATE INDEX ID_Conference on Conference (ID_Conference ASC)
+CREATE INDEX ConferenceID on Conference (ConferenceID ASC)
 ;
 
 -- Dni Konferencji
@@ -119,7 +119,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE ConferenceDays (
-    ConfDayID int  NOT NULL UNIQUE,
+    ConfDayID int  IDENTITY(1,1) NOT NULL UNIQUE,
     ConfID int  NOT NULL,
     Date date  NOT NULL,
     Price float  NOT NULL,
@@ -138,7 +138,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Discounts (
-    DiscountID int  NOT NULL UNIQUE,
+    DiscountID int  IDENTITY(1,1) NOT NULL UNIQUE,
     ConfDayID int  NOT NULL,
     DiscountStartDate date  NOT NULL,
     DiscountEndDate date  NOT NULL,
@@ -158,7 +158,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Participants (
-    ParticipantID int  NOT NULL UNIQUE,
+    ParticipantID int IDENTITY(1,1) NOT NULL UNIQUE,
     ClientID int  NOT NULL,
     FirstName nvarchar(20)  NOT NULL DEFAULT 'Kamil',
     LastName nvarchar(20)  NOT NULL DEFAULT 'Sokolowski',
@@ -179,7 +179,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE WorkshopRegistrations (
-    WorkshopRegID int  NOT NULL UNIQUE,
+    WorkshopRegID int IDENTITY(1,1)  NOT NULL UNIQUE,
     WorkshopReservID int  NOT NULL,
     ParticipantID int  NOT NULL,
     ConfDayRegistrationID int  NOT NULL,
@@ -197,7 +197,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE WorkshopReservations (
-    WorkshopReservID int  NOT NULL UNIQUE,
+    WorkshopReservID int IDENTITY(1,1) NOT NULL UNIQUE,
     WorkshopID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
     NumReservs int  NOT NULL,
@@ -218,7 +218,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 
 CREATE TABLE Workshops (
-    WorkshopID int  NOT NULL UNIQUE,
+    WorkshopID int  IDENTITY(1,1) NOT NULL UNIQUE,
     ConfDayID int  NOT NULL,
     Name nvarchar(40)  NOT NULL,
     Seats int  NOT NULL,
@@ -284,7 +284,7 @@ ALTER TABLE Discounts ADD CONSTRAINT Discounts_ConferenceDays
 -- Reference: Konferencje_Dni_Konferencje (table: ConferenceDays)
 ALTER TABLE ConferenceDays ADD CONSTRAINT Konferencje_Dni_Konferencje
     FOREIGN KEY (ConfID)
-    REFERENCES Conference (ID_Conference)
+    REFERENCES Conference (ConferenceID)
 	ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 -- Reference: Participants_Adresses (table: Participants)
