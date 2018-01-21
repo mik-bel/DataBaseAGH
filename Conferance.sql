@@ -48,7 +48,7 @@ CREATE TABLE Companies (
     CompanyID int IDENTITY(1,1) NOT NULL UNIQUE,
     CompanyName nvarchar(20)  NOT NULL,
     AdressID int  NOT NULL,
-    NIP nvarchar(30)  NOT NULL UNIQUE,
+    NIP nvarchar(12)  NOT NULL UNIQUE,
     CONSTRAINT Companies_pk PRIMARY KEY CLUSTERED (CompanyID ASC),
 	CONSTRAINT NIP_format_check CHECK (NIP like '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]')
 );
