@@ -1,4 +1,3 @@
-
 IF OBJECT_ID ('AddCompanyClient') is not null
 DROP PROC AddCompanyClient;
 GO

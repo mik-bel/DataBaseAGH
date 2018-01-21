@@ -138,9 +138,10 @@ CREATE TABLE ConfDayReservations (
     ClientID int  NOT NULL,
     ConfDayID int  NOT NULL,
     NumSeats int  NOT NULL,
-    ReservationDate date  NOT NULL,
+    ReservationDate datetime  NOT NULL,
     PaidPrice float  NOT NULL DEFAULT 0,
     NumStudents int  NOT NULL DEFAULT 0,
+	Cancelled bit default 0, 
     CONSTRAINT ConfDayReservations_pk PRIMARY KEY  (ConfDayReservationID),
 	CONSTRAINT NumSeats_num_ckeck CHECK (NumSeats>0),
 	CONSTRAINT NumStudents_not_more_then_NumSeats_check CHECK (NumStudents<=NumSeats)
@@ -225,8 +226,9 @@ CREATE TABLE WorkshopReservations (
     WorkshopID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
     NumReservs int  NOT NULL,
-    ReservationDate date  NOT NULL,
+    ReservationDate datetime  NOT NULL,
     NumStudents int  NOT NULL DEFAULT 0,
+	Cancelled bit default 0, 
     CONSTRAINT WorkshopReservations_pk PRIMARY KEY  (WorkshopReservID),
 	CONSTRAINT NumReservs_check CHECK (NumReservs > 0),
 	CONSTRAINT NumSrudent_not_greater_then_Reservs_ckeck CHECK (NumStudents <= NumReservs)
