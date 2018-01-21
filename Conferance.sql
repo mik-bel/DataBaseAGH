@@ -222,8 +222,8 @@ CREATE TABLE Workshops (
     ConfDayID int  NOT NULL,
     Name nvarchar(40)  NOT NULL,
     Seats int  NOT NULL,
-    StartTime time  NOT NULL,
-    EndTime time  NOT NULL,
+    StartTime datetime  NOT NULL,
+    EndTime datetime  NOT NULL,
     Price float  NOT NULL,
     CONSTRAINT Workshops_pk PRIMARY KEY  (WorkshopID),
 	CONSTRAINT Start_End_time_check CHECK (StartTime<EndTime)
