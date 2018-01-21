@@ -1,8 +1,5 @@
--- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2018-01-07 22:08:09.77
 
--- tables
--- Table: Adresses
+--  Adresy
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Adresses')
     DROP TABLE Adresses
@@ -22,7 +19,7 @@ CREATE TABLE Adresses (
 CREATE INDEX AdressID on Adresses (AdressID ASC)
 ;
 
--- Table: Clients
+-- Klienci
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Clients')
     DROP TABLE Clients
@@ -41,7 +38,7 @@ CREATE TABLE Clients (
 CREATE INDEX ClientID on Clients (ClientID ASC,CompanyID ASC)
 ;
 
--- Table: Companies
+-- Firmy
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Companies')
     DROP TABLE Companies
@@ -59,7 +56,7 @@ CREATE TABLE Companies (
 CREATE INDEX Companies_idx_1 on Companies (CompanyID ASC)
 ;
 
--- Table: ConfDayRegistrations
+-- Rejestracje dnia konferencji
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'ConfDayRegistrations')
     DROP TABLE ConfDayRegistrations
@@ -76,7 +73,7 @@ CREATE TABLE ConfDayRegistrations (
 CREATE INDEX ConfDayRegistrations_idx_1 on ConfDayRegistrations (ConfDayRegistrationID ASC)
 ;
 
--- Table: ConfDayReservations
+-- Rezerwacje dnia konferencji
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'ConfDayReservations')
     DROP TABLE ConfDayReservations
@@ -98,7 +95,7 @@ CREATE TABLE ConfDayReservations (
 CREATE INDEX ConfDayReservations_idx_1 on ConfDayReservations (ConfDayReservationID ASC)
 ;
 
--- Table: Conference
+-- Konferencje
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Conference')
     DROP TABLE Conference
@@ -115,7 +112,7 @@ CREATE TABLE Conference (
 CREATE INDEX ID_Conference on Conference (ID_Conference ASC)
 ;
 
--- Table: ConferenceDays
+-- Dni Konferencji
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'ConferenceDays')
     DROP TABLE ConferenceDays
@@ -134,7 +131,7 @@ CREATE TABLE ConferenceDays (
 CREATE INDEX ConferenceDays_idx_1 on ConferenceDays (ConfDayID ASC)
 ;
 
--- Table: Discounts
+-- Zniżki
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Discounts')
     DROP TABLE Discounts
@@ -154,7 +151,7 @@ CREATE TABLE Discounts (
 CREATE INDEX Discounts_idx_1 on Discounts (DiscountID ASC)
 ;
 
--- Table: Participants
+-- Uczestnicy
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Participants')
     DROP TABLE Participants
@@ -175,7 +172,7 @@ CREATE TABLE Participants (
 CREATE INDEX Participants_idx_1 on Participants (ParticipantID ASC)
 ;
 
--- Table: WorkshopRegistrations
+-- Rejestracje na warsztaty
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'WorkshopRegistrations')
     DROP TABLE WorkshopRegistrations
@@ -193,7 +190,7 @@ CREATE TABLE WorkshopRegistrations (
 CREATE INDEX WorkshopRegistrations_idx_1 on WorkshopRegistrations (WorkshopRegID ASC)
 ;
 
--- Table: WorkshopReservations
+-- Rezerwacje na warsztaty
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'WorkshopReservations')
     DROP TABLE WorkshopReservations
@@ -214,7 +211,7 @@ CREATE TABLE WorkshopReservations (
 CREATE INDEX WorkshopReservations_idx_1 on WorkshopReservations (WorkshopReservID ASC)
 ;
 
--- Table: Workshops
+-- Warsztaty
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Workshops')
     DROP TABLE Workshops
@@ -338,5 +335,4 @@ ALTER TABLE Workshops ADD CONSTRAINT Workshops_ConferenceDays
     REFERENCES ConferenceDays (ConfDayID)
 	ON UPDATE NO ACTION ON DELETE NO ACTION;
 
--- End of file.
 
