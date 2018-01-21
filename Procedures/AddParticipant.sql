@@ -8,6 +8,7 @@ CREATE PROCEDURE AddParticipant (
     @AdressID int,
     @StudentCardID int,
     @ClientID int,
+    @ParticipantID int = NULL OUT,
 ) AS BEGIN
 	SET NOCOUNT ON
 
@@ -27,5 +28,5 @@ CREATE PROCEDURE AddParticipant (
 
 	INSERT INTO Participants (ClientID, FirstName, LastName, AdressID, StudentCardID)
 	VALUES (@ClientID, @FirstName, @LastName, @AdressID, @StudentCardID)
-	SET ParticipantID = SCOPE_IDENTITY();
+	SET @ParticipantID = SCOPE_IDENTITY();
 END

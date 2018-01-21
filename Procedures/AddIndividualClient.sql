@@ -19,7 +19,7 @@ CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak 
     @StudentCardID int,
 
  --uzywane do dodania adresu
-  	@AdressID int = NULL OUT,
+  	@AdressID int,
     @Country nvarchar(15),
     @PostalCode nvarchar(6),
     @City nvarchar(20),
@@ -48,8 +48,8 @@ CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak 
 				VALUES (@Login, @Password, @Mail, NULL)
 				SET(@ClientID) = SCOPE_IDENTITY();
 				
-				EXEC AddAddress(@Country, @PostalCode, @City, @FstLine, @ScdLine)
-				EXEC AddParticipant(@FirstName, @LastName, @AdressID, @StudentCardID, @ClientID)
+				
+				EXEC AddParticipant @FirstName, @LastName, @AdressID, @StudentCardID, @ClientID;
 			
 			COMMIT TRANSACTION
 		END TRY
