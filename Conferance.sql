@@ -1,9 +1,84 @@
+-- Rejestracje na warsztaty
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'WorkshopRegistrations')
+    DROP TABLE WorkshopRegistrations
+GO
+
+-- Rejestracje dnia konferencji
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConfDayRegistrations')
+    DROP TABLE ConfDayRegistrations
+GO
+
+-- Uczestnicy
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Participants')
+    DROP TABLE Participants
+GO
+
+
+-- Rezerwacje na warsztaty
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'WorkshopReservations')
+    DROP TABLE WorkshopReservations
+GO
+
+
+-- Warsztaty
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Workshops')
+    DROP TABLE Workshops
+GO
+
+
+-- Rezerwacje dnia konferencji
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConfDayReservations')
+    DROP TABLE ConfDayReservations
+GO
+
+-- Zniżki
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Discounts')
+    DROP TABLE Discounts
+GO
+
+
+-- Dni Konferencji
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'ConferenceDays')
+    DROP TABLE ConferenceDays
+GO
+
+
+-- Klienci
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Clients')
+    DROP TABLE Clients
+GO
+
+
+-- Firmy
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Companies')
+    DROP TABLE Companies
+GO
+
+
+-- Konferencje
+IF EXISTS (SELECT name FROM sysobjects
+            WHERE type = 'U' AND name = 'Conference')
+    DROP TABLE Conference
+GO
+
 
 --  Adresy
 IF EXISTS (SELECT name FROM sysobjects
             WHERE type = 'U' AND name = 'Adresses')
     DROP TABLE Adresses
 GO
+
+
 
 CREATE TABLE Adresses (
     AdressID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -19,11 +94,6 @@ CREATE TABLE Adresses (
 CREATE INDEX AdressID on Adresses (AdressID ASC)
 ;
 
--- Klienci
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Clients')
-    DROP TABLE Clients
-GO
 
 CREATE TABLE Clients (
     ClientID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -32,17 +102,11 @@ CREATE TABLE Clients (
     Password nvarchar(255)  NOT NULL,
     Mail varchar(60)  NOT NULL UNIQUE,
     CONSTRAINT Clients_pk PRIMARY KEY  (ClientID),
-	CONSTRAINT PostalCode_clength_check CHECK (Mail like '%_@_%_._%'),
+	CONSTRAINT Client_mail_format_check CHECK (Mail like '%_@_%_._%'),
 );
 
 CREATE INDEX ClientID on Clients (ClientID ASC,CompanyID ASC)
 ;
-
--- Firmy
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Companies')
-    DROP TABLE Companies
-GO
 
 CREATE TABLE Companies (
     CompanyID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -56,28 +120,18 @@ CREATE TABLE Companies (
 CREATE INDEX Companies_idx_1 on Companies (CompanyID ASC)
 ;
 
--- Rejestracje dnia konferencji
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'ConfDayRegistrations')
-    DROP TABLE ConfDayRegistrations
-GO
 
 CREATE TABLE ConfDayRegistrations (
     ConfDayRegistrationID int IDENTITY(1,1) NOT NULL UNIQUE,
     ParticipantID int  NOT NULL,
     ConfDayReservationID int  NOT NULL,
     CONSTRAINT ConfDayRegistrations_pk PRIMARY KEY  (ConfDayRegistrationID),
-	CONSTRAINT Participant_Reserv_unique UNIQUE (ConfDayReservationID, ParticipantID)
+	CONSTRAINT Participant_ConfDayReservationID_unique UNIQUE (ConfDayReservationID, ParticipantID)
 );
 
 CREATE INDEX ConfDayRegistrations_idx_1 on ConfDayRegistrations (ConfDayRegistrationID ASC)
 ;
 
--- Rezerwacje dnia konferencji
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'ConfDayReservations')
-    DROP TABLE ConfDayReservations
-GO
 
 CREATE TABLE ConfDayReservations (
     ConfDayReservationID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -95,11 +149,6 @@ CREATE TABLE ConfDayReservations (
 CREATE INDEX ConfDayReservations_idx_1 on ConfDayReservations (ConfDayReservationID ASC)
 ;
 
--- Konferencje
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Conference')
-    DROP TABLE Conference
-GO
 
 CREATE TABLE Conference (
     ConferenceID int IDENTITY(1,1)  NOT NULL UNIQUE,
@@ -111,12 +160,6 @@ CREATE TABLE Conference (
 
 CREATE INDEX ConferenceID on Conference (ConferenceID ASC)
 ;
-
--- Dni Konferencji
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'ConferenceDays')
-    DROP TABLE ConferenceDays
-GO
 
 CREATE TABLE ConferenceDays (
     ConfDayID int  IDENTITY(1,1) NOT NULL UNIQUE,
@@ -131,11 +174,6 @@ CREATE TABLE ConferenceDays (
 CREATE INDEX ConferenceDays_idx_1 on ConferenceDays (ConfDayID ASC)
 ;
 
--- Zniżki
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Discounts')
-    DROP TABLE Discounts
-GO
 
 CREATE TABLE Discounts (
     DiscountID int  IDENTITY(1,1) NOT NULL UNIQUE,
@@ -151,11 +189,6 @@ CREATE TABLE Discounts (
 CREATE INDEX Discounts_idx_1 on Discounts (DiscountID ASC)
 ;
 
--- Uczestnicy
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Participants')
-    DROP TABLE Participants
-GO
 
 CREATE TABLE Participants (
     ParticipantID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -172,11 +205,7 @@ CREATE TABLE Participants (
 CREATE INDEX Participants_idx_1 on Participants (ParticipantID ASC)
 ;
 
--- Rejestracje na warsztaty
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'WorkshopRegistrations')
-    DROP TABLE WorkshopRegistrations
-GO
+
 
 CREATE TABLE WorkshopRegistrations (
     WorkshopRegID int IDENTITY(1,1)  NOT NULL UNIQUE,
@@ -184,17 +213,12 @@ CREATE TABLE WorkshopRegistrations (
     ParticipantID int  NOT NULL,
     ConfDayRegistrationID int  NOT NULL,
     CONSTRAINT WorkshopRegistrations_pk PRIMARY KEY  (WorkshopRegID),
-	CONSTRAINT Participant_Reserv_unique UNIQUE (WorkshopRegID, ParticipantID)
+	CONSTRAINT Participant_WorkShop_Reserv_unique UNIQUE (WorkshopRegID, ParticipantID)
 );
 
 CREATE INDEX WorkshopRegistrations_idx_1 on WorkshopRegistrations (WorkshopRegID ASC)
 ;
 
--- Rezerwacje na warsztaty
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'WorkshopReservations')
-    DROP TABLE WorkshopReservations
-GO
 
 CREATE TABLE WorkshopReservations (
     WorkshopReservID int IDENTITY(1,1) NOT NULL UNIQUE,
@@ -210,12 +234,6 @@ CREATE TABLE WorkshopReservations (
 
 CREATE INDEX WorkshopReservations_idx_1 on WorkshopReservations (WorkshopReservID ASC)
 ;
-
--- Warsztaty
-IF EXISTS (SELECT name FROM sysobjects
-            WHERE type = 'U' AND name = 'Workshops')
-    DROP TABLE Workshops
-GO
 
 CREATE TABLE Workshops (
     WorkshopID int  IDENTITY(1,1) NOT NULL UNIQUE,
