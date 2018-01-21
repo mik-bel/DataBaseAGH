@@ -27,7 +27,7 @@ GO
 
 CREATE TABLE Clients (
     ClientID int IDENTITY(1,1) NOT NULL UNIQUE,
-    CompanyID int  NULL,
+    CompanyID int NULL UNIQUE,
     Login nchar(10)  NOT NULL UNIQUE,
     Password nvarchar(255)  NOT NULL,
     Mail varchar(60)  NOT NULL UNIQUE,
