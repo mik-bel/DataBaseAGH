@@ -7,20 +7,19 @@ GO
 CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak i osobą indywidualną - rozbijamy.
 -- dodatkowo od razu dodajemy participanta
 	@ClientID int = NULL OUT,
-	@CompanyID int,
 	@Login nchar(10),
 	@Password nvarchar(255),
 	@Mail varchar(60),
 	
 --uzywane do dodania participanta
-	@ParticipantID int,
+	@ParticipantID int = NULL OUT,
     @FirstName nvarchar(20),
     @LastName nvarchar(20),
     @AdressID int,
     @StudentCardID int,
 
  --uzywane do dodania adresu
-  	@AdressID int,
+  	@AdressID int = NULL OUT,
     @Country nvarchar(15),
     @PostalCode nvarchar(6),
     @City nvarchar(20),
@@ -40,15 +39,17 @@ CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak 
 					THROW 2500, 'Login cant be null!', 1
 				
 				IF @Password is null 
-					THROW (2500, 'Password cant be null!', 1)
+					THROW 2500, 'Password cant be null!', 1
 				
 				IF @Mail is null
-					THROW (2500, 'Mail cant be null!', 1)
+					THROW 2500, 'Mail cant be null!', 1
 
-				SET(@ClientID) = SCOPE_IDENTITY()
+				INSERT INTO Clients(Login, Password, Mail, CompanyID)
+				VALUES (@Login, @Password, @Mail, NULL)
+				SET(@ClientID) = SCOPE_IDENTITY();
 				
-				EXEC AddAddress
-				EXEC AddParticipant(@ParticipantID, @FirstName, @LastName, @AdressID, @StudentCardID)
+				EXEC AddAddress(@Country, @PostalCode, @City, @FstLine, @ScdLine)
+				EXEC AddParticipant(@FirstName, @LastName, @AdressID, @StudentCardID, @ClientID)
 			
 			COMMIT TRANSACTION
 		END TRY
