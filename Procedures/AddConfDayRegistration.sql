@@ -30,6 +30,9 @@ BEGIN
 
 		DECLARE @PriceToPay float = dbo.f_PriceToPayPerDay (@ClientID, @ConfDayReservationID)
 
+		IF dbo.ConfDayReservationFreeSeats (@ConfDayReservationID) < 1
+			THROW 14, 'ConfDayReservationFreeSeats (@ConfDayReservationID) < 1', 1 
+
 		IF @PriceToPay >= (select PaidPrice from ConfDayReservations where ConfDayReservationID=@ConfDayReservationID)
 			THROW 14,'Nie zostala dokonana wplata, uczestnik nie moze byc zarejestrowany na dany dzien konferencji.',1
 

@@ -35,6 +35,9 @@ BEGIN
 			and WorkshopReservations.WorkshopReservID = @WorkshopReservID
 			) = 0
 			THROW 14, 'Nie istnieje takiego polaczenia @ParticipantID - @WorkshopReservID w AddWorkshopRegistration',1
+		
+		if dbo.WorkshopReservationFreeSeats(@WorkshopReservID) < 1
+			THROW 14, 'WorkshopReservationFreeSeats(@WorkshopReservID) = 0 in AddWorkshopRegistration', 1
 
 		INSERT WorkshopRegistrations(WorkshopReservID, ParticipantID,ConfDayRegistrationID) 
 		VALUES (@WorkshopReservID, @ParticipantID,@ConfDayRegistrationID)
