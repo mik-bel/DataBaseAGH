@@ -168,6 +168,7 @@ CREATE TABLE ConferenceDays (
     Date date  NOT NULL,
     Price float  NOT NULL,
     SeatsNum int  NOT NULL,
+	StudentDiscount float default 0,
     CONSTRAINT ConferenceDays_pk PRIMARY KEY  (ConfDayID),
 	CONSTRAINT SeatsNum_not_zero CHECK (SeatsNum>0)
 );

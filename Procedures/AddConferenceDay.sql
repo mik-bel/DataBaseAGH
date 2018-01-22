@@ -6,6 +6,7 @@ CREATE PROCEDURE AddConferenceDay
 	@Date date,
 	@Price float,
 	@SeatNums int,
+	@StudentDiscount float,
 	@ConfDayID int = NULL OUT
 AS
 BEGIN
@@ -25,9 +26,12 @@ BEGIN
 			
 		IF @SeatNums IS NULL
 			THROW 14, 'Musisz podac liczbe miejsc w dniu konferencji konferencji', 1
+			
+		IF @StudentDiscount IS NULL OR @StudentDiscount <0
+			THROW 14, '@StudentDiscount IS NULL OR @StudentDiscount < 0 in AddConferenceDay', 1
 
-		INSERT ConferenceDays (ConfID, Date, Price, SeatsNum) 
-		VALUES (@ConfDayID, @Date, @Price, @SeatNums)
+		INSERT ConferenceDays (ConfID, Date, Price, SeatsNum, StudentDiscount) 
+		VALUES (@ConfDayID, @Date, @Price, @SeatNums,@StudentDiscount)
 		SET @ConfDayID =  SCOPE_IDENTITY(); 
 
 		COMMIT TRANSACTION
