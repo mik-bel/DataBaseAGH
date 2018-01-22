@@ -30,7 +30,7 @@ BEGIN
 		
 		DECLARE @ConfDate date = (select ConferenceDays.Date from Workshops 
 								inner join ConferenceDays on ConferenceDays.ConfDayID = Workshops.ConfDayID
-								where Workshops.WorkshopID=@WorkshopID  )
+								where Workshops.WorkshopID=@WorkshopID )
 				
 		IF @ReservationDate  > @ConfDate
 			THROW 14, '@ReservationDate  > @ConfDate in AddWorkshopReservation', 1
