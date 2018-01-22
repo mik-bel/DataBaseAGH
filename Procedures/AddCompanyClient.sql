@@ -33,7 +33,7 @@ SET NOCOUNT ON
 				SET @ClientID = SCOPE_IDENTITY();
 				SET @CompanyID = SCOPE_IDENTITY();
 
-				EXEC AddCompany @CompanyID, @CompanyName, @AdressID, @NIP 
+				EXEC AddCompany @CompanyID, @CompanyName, @AdressID, @NIP
 
 		COMMIT TRANSACTION
 

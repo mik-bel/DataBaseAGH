@@ -42,7 +42,7 @@ AS BEGIN
 				WHERE ParticipantID = @ParticipantID
 
 				IF @@ROWCOUNT = 0
-					THROW 2500, 'You provided incorrect ParticipantID, there is no participant with such ID', 1
+					THROW 2500, 'You provided incorrect ParticipantID, Participant with such ID doesnt exist!', 1
 
 				COMMIT TRANSACTION
 		END TRY
