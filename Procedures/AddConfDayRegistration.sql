@@ -28,10 +28,10 @@ BEGIN
 			and ConfDayReservations.ConfDayReservationID = @ConfDayReservationID) = 0
 			THROW 14, 'Nie istnieje takiego polaczenia @ParticipantID - @ConfDayReservationID w AddConfDayRegistration',1
 
-		DECLARE @PriceToPay float = dbo.f_PriceToPay (@ClientID)
+		DECLARE @PriceToPay float = dbo.f_PriceToPayPerDay (@ClientID, @ConfDayReservationID)
 
 		IF @PriceToPay >= (select PaidPrice from ConfDayReservations where ConfDayReservationID=@ConfDayReservationID)
-			THROW 14,'Nie zostala dokonana wplata, uczestnik nie moze byc zarejestrowany na konferencje.',1
+			THROW 14,'Nie zostala dokonana wplata, uczestnik nie moze byc zarejestrowany na dany dzien konferencji.',1
 
 		INSERT ConfDayRegistrations(ParticipantID, ConfDayReservationID) 
 		VALUES (@ParticipantID, @ConfDayReservationID)

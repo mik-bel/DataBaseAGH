@@ -21,7 +21,7 @@ BEGIN
 		IF @DiscountStartDate IS NULL
 			THROW 14,'@DiscountStartDate is null in AddDiscount', 1
 		
-		IF @DiscountEndTime IS NULL
+		IF @DiscountEndDate IS NULL
 			THROW 14,'@DiscountEndTime is null in AddDiscount', 1
 
 		IF @ConfDayID IS NULL

@@ -45,6 +45,10 @@ BEGIN
 		IF @NumReservs > dbo.WorkshopFreeSeats(@WorkshopID)
 			THROW 14,'@NumReservs > dbo.WorkshopFreeSeats(@WorkshopID) in AddWorkshopReservation', 1
 
+		Declare @NumConfSeatsReserv int = (select NumSeats from ConfDayReservations where ConfDayReservationID = @ConfDayReservationID)
+
+		If @NumConfSeatsReserv < @NumReservs
+			THROW 14,'@NumConfSeatsReserv < @NumReservs in AddWorkshopReservation', 1
 
 		INSERT WorkshopReservations(WorkshopID, ConfDayReservationID, NumReservs, ReservationDate, NumStudents) 
 		VALUES (@WorkshopID, @ConfDayReservationID, @NumReservs, @ReservationDate, @NumStudents)
