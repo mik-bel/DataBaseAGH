@@ -4,7 +4,7 @@ GO
 
 
 CREATE PROCEDURE CancelClientWorkshopReservation (
-	@ClientID int,
+	@ConfDayReservationID
 	@WorkshopID int
 )
 
@@ -20,21 +20,13 @@ AS BEGIN
 
 				
 				UPDATE WorkshopReservations
-					
 					SET Cancelled = 1
-				WHERE ( select ConfDayReservations.ConfDayReservationID from ConfDayReservations
-						where ConfDayReservations.ClientID = @ClientID
-				 ) = WorkshopReservations.ConfDayReservationID and WorkshopReservations.WorkshopID = @WorkshopID
+				WHERE ConfDayReservationID = @ConfDayReservationID and WorkshopID = @WorkshopID
 				
 
 				DELETE WRS from WorkshopRegistrations WRS
-				
 					left join WorkshopReservations w on w.WorkshopReservID = WRS.WorkshopReservID
-
-				WHERE WorkshopReservID = (select WorkshopReservID from WorkshopReservations wr 
-					inner join ConfDayReservations on ConfDayReservations.ClientID = @ClientID
-					where wr.WorkshopID = @WorkshopID and ConfDayReservationID = wr.ConfDayReservationID
-				)
+				WHERE w.ConfDayReservationID = @ConfDayReservationID and w.WorkshopID = @WorkshopID
 
 			COMMIT TRANSACTION
 

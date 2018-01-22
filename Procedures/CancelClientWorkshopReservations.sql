@@ -4,7 +4,7 @@ GO
 
 
 CREATE PROCEDURE CancelClientWorkshopReservations (
-	@ClientID int
+	@ConfDayReservationID int
 )
 
 AS BEGIN
@@ -13,25 +13,19 @@ AS BEGIN
 		BEGIN TRY
 			BEGIN TRANSACTION
 
-				IF @ClientID is null
-				THROW 2500, 'ClientID cant be null!', 1
-
+				IF @ConfDayReservationID is null
+				THROW 2500, 'ConfDayReservationID cant be null!', 1
 
 		
 				UPDATE WorkshopReservations
 					SET Cancelled = 1
-				WHERE ( select ConfDayReservations.ConfDayReservationID from ConfDayReservations
-						where ConfDayReservations.ClientID = @ClientID
-				 ) = WorkshopReservations.ConfDayReservationID
-				
-				DELETE WRS from WorkshopRegistrations WRS
-				
-				left join WorkshopReservations w on w.WorkshopReservID = WRS.WorkshopReservID
+				WHERE ConfDayReservationID = @ConfDayReservationID
 
-				WHERE WorkshopReservID = (select WorkshopReservID from WorkshopReservations wr 
-					inner join ConfDayReservations on ConfDayReservations.ClientID = @ClientID
-					where ConfDayReservationID = wr.ConfDayReservationID
-					)
+
+				DELETE WRS from WorkshopRegistrations WRS
+				WHERE WRS.WorkshopReservID = (select wr.WorkshopReservID from WorkshopReservations wr 
+					inner join ConfDayReservations on ConfDayReservations.ConfDayReservationID = @ConfDayReservationID
+				)
 
 			COMMIT TRANSACTION
 
