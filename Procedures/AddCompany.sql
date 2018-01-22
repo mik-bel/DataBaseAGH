@@ -26,6 +26,14 @@ AS BEGIN
 		IF @NIP is null
 			THROW 2503, 'NIP cant be null!', 1
 
+
+	 	-- sprawdzanie czy adres istnieje
+
+	 	IF (Select AdressID from Adresses where AdressID = @AdressID) is null
+	 		THROW 2500, 'Adress with provided ID doesnt exist!', 1
+
+
+
 		INSERT INTO Companies (CompanyID, CompanyName, AdressID, NIP)
 		VALUES @CompanyID, @CompanyName, @AdressID, @NIP;
 
