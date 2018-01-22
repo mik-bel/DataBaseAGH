@@ -73,7 +73,7 @@ CREATE FUNCTION ConfDayReservationFreeSeats(@ReservationID int)
 			SET @Seats = (
 				SELECT NumSeats
 				FROM ConfDayReservations
-				WHERE ConfDayReservationID = @ReservationID
+				WHERE ConfDayReservationID = @ReservationID 
 			)
 
 			DECLARE @Taken AS int 
@@ -98,7 +98,7 @@ CREATE FUNCTION WorkshopReservationFreeSeats(@ReservationID int)
 			SET @Seats = (
 				SELECT NumReservs
 				FROM WorkshopReservations
-				WHERE WorkshopReservID = @ReservationID
+				WHERE WorkshopReservID = @ReservationID 
 			)
 
 			DECLARE @Taken AS int
