@@ -17,32 +17,35 @@ BEGIN
 		BEGIN TRANSACTION
 		
 		
-		IF @ConfDayID IS NULL
-			THROW 14,'@ConfDayID is null in AddDiscount', 1
-		
-		IF @DiscountStartDate IS NULL
-			THROW 14,'@DiscountStartDate is null in AddDiscount', 1
-		
-		IF @DiscountEndTime IS NULL
-			THROW 14,'@DiscountEndTime is null in AddDiscount', 1
+		IF @ClientID IS NULL
+			THROW 14,'@ClientID is null in AddConfDayReservation', 1
 
 		IF @ConfDayID IS NULL
-			THROW 14,'@Discount is null in AddDiscount', 1
-						
-		IF @Discount < 0
-			THROW 14,'@Discount must be > 0  in AddDiscount', 1
-						
-		IF @DiscountStartDate > @DiscountEndDate
-			THROW 14,'@DiscountStartDate > @DiscountEndDate in AddDiscount', 1
-			
-		DECLARE @ConferenceDate date = (select Date from ConferenceDays where ConferenceDays.ConfDayID = @ConfDayID) 
+			THROW 14,'@ConfDayID is null in AddConfDayReservation', 1
+
+		IF @NumSeats IS NULL
+			THROW 14,'@NumSeats is null in AddConfDayReservation', 1
+		IF @ReservationDate IS NULL
+			THROW 14,'@ReservationDate is null in AddConfDayReservation', 1
 		
-		IF @DiscountStartDate > @ConferenceDate or @DiscountEndDate > @ConferenceDate
-			THROW 14,'@DiscountStartDate > @ConferenceDate or @DiscountEndDate > @ConferenceDate in AddDiscount', 1
+		IF @PaidPrice IS NULL
+			THROW 14,'@PaidPrice is null in AddConfDayReservation', 1
 		
-		INSERT Discounts(ConfDayID, DiscountStartDate, DiscountEndDate, Discount) 
-		VALUES (@ConfDayID, @DiscountStartDate, @DiscountEndDate, @Discount)
-		SET @DiscountID =  SCOPE_IDENTITY(); 
+		IF @NumStudents IS NULL
+			THROW 14,'@NumStudents is null in AddConfDayReservation', 1
+
+		IF @NumStudents > @NumSeats
+			THROW 14,'@NumStudents > @NumSeats in AddConfDayReservation', 1
+
+		IF @PaidPrice < 0 
+			THROW 14,'@PaidPrice < 0  in AddConfDayReservation', 1
+
+		IF dbo.ConfDayFreeSeats(@ConfDayID) < @NumSeats
+			THROW 14,'ConfDayFreeSeats(@ConfDayID) < @NumSeats in AddConfDayReservation', 1
+	
+		INSERT ConfDayReservations (ClientID, ConfDayID, NumSeats, ReservationDate, PaidPrice, NumStudents) 
+		VALUES (@ClientID, @ConfDayID, @NumSeats, @ReservationDate, @PaidPrice, @NumStudents)
+		SET @ConfDayReservationID =  SCOPE_IDENTITY(); 
 
 		COMMIT TRANSACTION
 	END TRY

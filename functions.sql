@@ -30,7 +30,7 @@ CREATE FUNCTION ConfDayFreeSeats(@CDayID int)
 			SET @Taken = (
 				SELECT SUM( NumSeats)
 				FROM ConfDayReservations
-				WHERE ConfDayID = @CDayID
+				WHERE ConfDayID = @CDayID and Cancelled = 0
 			)
 			IF @Taken is null 
 			BEGIN
@@ -46,7 +46,7 @@ CREATE FUNCTION WorkshopFreeSeats(@WorkshopID int)
 		BEGIN
 			DECLARE @Seats AS int 
 			SET @Seats = (
-				SELECT SeatsNum
+				SELECT Seats
 				FROM Workshops
 				WHERE WorkshopID = @WorkshopID
 			)
@@ -55,7 +55,7 @@ CREATE FUNCTION WorkshopFreeSeats(@WorkshopID int)
 			SET @Taken = (
 				SELECT SUM(NumReservs)
 				FROM WorkshopReservations
-				WHERE WorkshopID = @WorkshopID	
+				WHERE WorkshopID = @WorkshopID and Cancelled = 0
 			)
 			IF @Taken is null
 			BEGIN 
