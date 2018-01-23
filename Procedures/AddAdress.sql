@@ -2,7 +2,6 @@ if EXISTS (select * from sys.procedures where name = 'AddAdress')
     drop procedure AddAdress
 GO
 
-
 CREATE PROCEDURE AddAdress
 	@AdressID int OUT,
 	@Country nvarchar (15),

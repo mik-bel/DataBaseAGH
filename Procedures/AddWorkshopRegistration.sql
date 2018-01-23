@@ -23,7 +23,7 @@ BEGIN
 			THROW 14,'@ConfDayRegistrationID is null in AddWorkshopRegistration', 1
 		
 
-		Declare @ClientID int = (Select TOP 1 ClientID from Participants where Participants.ParticipantID=@ParticipantID)
+	--	Declare @ClientID int = (Select TOP 1 ClientID from Participants where Participants.ParticipantID=@ParticipantID)
 
 		IF (SELECT Count (*) from Clients 
 			Inner Join Participants on Participants.ClientID = Clients.ClientID 

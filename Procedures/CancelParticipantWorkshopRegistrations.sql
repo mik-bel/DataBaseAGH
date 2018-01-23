@@ -18,7 +18,7 @@ AS BEGIN
 
 
 					DELETE b From WorkshopRegistrations b
-					LEFT JOIN Participants where ParticipantID = b.ParticipantID
+					LEFT JOIN Participants on b.ParticipantID = @ParticipantID
 		
 		COMMIT TRANSACTION
 	END TRY
