@@ -50,3 +50,4 @@ AS BEGIN
 END
 
 
+ALTER TABLE ConfDayRegistrations ENABLE TRIGGER ConferenceRegistrationsValidate
