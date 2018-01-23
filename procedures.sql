@@ -1,4 +1,4 @@
-
+USE mwroblew_a
 
 if EXISTS (select * from sys.procedures where name = 'AddAdress')
     drop procedure AddAdress
@@ -39,7 +39,7 @@ AS BEGIN
 				IF @AdressID is null 
 					or (select count(pr.AdressID)
 						from (select AdressID
-								from company
+								from dbo.Companies
 								union all
 								select AdressID
 								from Participants) as pr
@@ -99,10 +99,10 @@ AS BEGIN
 
 
 		INSERT INTO Companies (CompanyID, CompanyName, AdressID, NIP)
-		VALUES @CompanyID, @CompanyName, @AdressID, @NIP;
+		VALUES (@CompanyID, @CompanyName, @AdressID, @NIP)
 
 END
-
+GO
 IF OBJECT_ID ('AddCompanyClient') is not null
 DROP PROC AddCompanyClient;
 GO
@@ -202,7 +202,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddConference')
     drop procedure AddConference
 GO
@@ -237,7 +237,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddConfDayReservation')
     drop procedure AddConfDayReservation
 GO
@@ -296,7 +296,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddConferenceDay')
     drop procedure AddConferenceDay
 GO
@@ -342,7 +342,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddDiscount')
     drop procedure AddDiscount
 GO
@@ -398,7 +398,7 @@ BEGIN
 END
 
 --procedures
-
+GO
 IF OBJECT_ID ('AddIndividualClient') is not null
 DROP PROC AddIndividualClient;
 GO
@@ -415,15 +415,8 @@ CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak 
     @FirstName nvarchar(20),
     @LastName nvarchar(20),
     @AdressID int,
-    @StudentCardID int,
+    @StudentCardID int
 
- --uzywane do dodania adresu
-  	@AdressID int,
-    @Country nvarchar(15),
-    @PostalCode nvarchar(6),
-    @City nvarchar(20),
-    @FstLine nvarchar(40),
-    @ScdLine nvarchar(40)
 )
 	AS
 	BEGIN
@@ -445,7 +438,7 @@ CREATE PROCEDURE AddIndividualClient ( --klient może być zarówno firmą, jak 
 
 				INSERT INTO Clients(Login, Password, Mail, CompanyID)
 				VALUES (@Login, @Password, @Mail, NULL)
-				SET(@ClientID) = SCOPE_IDENTITY();
+				SET @ClientID = SCOPE_IDENTITY();
 				
 				
 				EXEC AddParticipant @FirstName, @LastName, @AdressID, @StudentCardID, @ClientID;
@@ -470,28 +463,29 @@ CREATE PROCEDURE AddParticipant (
     @AdressID int,
     @StudentCardID int,
     @ClientID int,
-    @ParticipantID int = NULL OUT,
+    @ParticipantID int = NULL OUT
 ) AS BEGIN
 	SET NOCOUNT ON
 
 
 	IF @FirstName is null
-		THROW (2501, 'First name cant be null!', 1)
+		THROW 2501, 'First name cant be null!', 1
 	
 	IF @LastName is null
-		(THROW 2501, 'LastName cant be null!', 1)
+		THROW 2501, 'LastName cant be null!', 1
 
 	IF @AdressID is null
-		(THROW 2501, 'AdressID cant be null!', 1)
+		THROW 2501, 'AdressID cant be null!', 1
 
 	IF @ClientID is null
-		(THROW 2501, 'ClientID cant be null', 1)
+		THROW 2501, 'ClientID cant be null', 1
 
 
 	INSERT INTO Participants (ClientID, FirstName, LastName, AdressID, StudentCardID)
 	VALUES (@ClientID, @FirstName, @LastName, @AdressID, @StudentCardID)
 	SET @ParticipantID = SCOPE_IDENTITY();
 END
+GO
 if EXISTS (select * from sys.procedures where name = 'AddPayment')
     drop procedure AddPayment
 GO
@@ -525,7 +519,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddWorkshop')
     drop procedure AddWorkshop
 GO
@@ -585,7 +579,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddWorkshopRegistration')
     drop procedure AddWorkshopRegistration
 GO
@@ -640,7 +634,7 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 if EXISTS (select * from sys.procedures where name = 'AddWorkshopReservation')
     drop procedure AddWorkshopReservation
 GO
@@ -706,14 +700,14 @@ BEGIN
 	END CATCH
 
 END
-
+GO
 IF OBJECT_ID ('CancelClientWorkshopReservation') is not null
 DROP PROC CancelClientWorkshopReservation;
 GO
 
 
 CREATE PROCEDURE CancelClientWorkshopReservation (
-	@ConfDayReservationID
+	@ConfDayReservationID INT,
 	@WorkshopID int
 )
 
@@ -722,11 +716,6 @@ AS BEGIN
 		
 		BEGIN TRY
 			BEGIN TRANSACTION
-
-				IF @ClientID is null
-				THROW 2500, 'ClientID cant be null!', 1
-
-
 				
 				UPDATE WorkshopReservations
 					SET Cancelled = 1
@@ -860,7 +849,7 @@ AS BEGIN
 						THROW 2500, 'ParticipantID cant be null!', 1
 
 					DELETE b From WorkshopRegistrations b
-					LEFT JOIN Participants where ParticipantID = b.ParticipantID and b.WorkshopRegID = @WorkshopRegID
+					WHERE @ParticipantID = b.ParticipantID and b.WorkshopRegID = @WorkshopRegID
 
 					 
 		COMMIT TRANSACTION
@@ -894,7 +883,7 @@ AS BEGIN
 
 
 					DELETE b From WorkshopRegistrations b
-					LEFT JOIN Participants on b.ParticipantID = @ParticipantID
+					where b.ParticipantID = @ParticipantID
 		
 		COMMIT TRANSACTION
 	END TRY
@@ -941,9 +930,9 @@ AS BEGIN
 
 				UPDATE Clients
 				SET
-					CompanyID = @CompanyID
-					Login = @Login
-					Password = @Password
+					CompanyID = @CompanyID,
+					Login = @Login,
+					Password = @Password,
 					Mail = @Mail
 				WHERE ClientID = @ClientID 
 
@@ -969,7 +958,7 @@ GO
 CREATE PROCEDURE ModifyCompany (
 	@CompanyID int,
 	@CompanyName nvarchar (20),
-	@AdressID int,
+	@AdressID int
 )
 
 AS BEGIN
@@ -979,17 +968,17 @@ AS BEGIN
 		BEGIN TRANSACTION
 
 			IF @CompanyID is null
-			THROW 2500, 'CompanyID cant be null!'
+			THROW 2500, 'CompanyID cant be null!',1 
 
 			IF @CompanyName is null 
-			THROW 2500, 'CompanyName cant be null!'
+			THROW 2500, 'CompanyName cant be null!',1
 
 			IF @AdressID is null 
-			THROW 2500, 'AdressID cant be null!'
+			THROW 2500, 'AdressID cant be null!',1
 
 			UPDATE Companies
 			SET
-				CompanyName = @CompanyName
+				CompanyName = @CompanyName,
 				AdressID = @AdressID
 
 			WHERE CompanyID = @CompanyID
@@ -1039,8 +1028,8 @@ AS BEGIN
 
 			UPDATE Conference
 			SET 
-				Name = @Name
-				AdressID = @AdressID
+				Name = @Name,
+				AdressID = @AdressID,
 				StudentDiscount = @StudentDiscount
 			WHERE ConferenceID = @ConferenceID
 
@@ -1093,9 +1082,9 @@ AS BEGIN
 				UPDATE Participants
 				SET
 
-					FirstName = @FirstName
-					LastName = @LastName
-					AdressID = @AdressID
+					FirstName = @FirstName,
+					LastName = @LastName,
+					AdressID = @AdressID,
 					StudentCardID = @StudentCardID
 				WHERE ParticipantID = @ParticipantID
 
