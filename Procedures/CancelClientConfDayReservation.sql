@@ -4,7 +4,7 @@ GO
 
 
 CREATE PROCEDURE CancelClientConfDayReservation (
-	@ConfDayReservationID int,
+	@ConfDayReservationID int
 )
 
 AS BEGIN

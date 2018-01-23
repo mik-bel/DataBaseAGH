@@ -110,9 +110,9 @@ CREATE INDEX ClientID on Clients (ClientID ASC,CompanyID ASC)
 
 CREATE TABLE Companies (
     CompanyID int IDENTITY(1,1) NOT NULL UNIQUE,
-    CompanyName nvarchar(20)  NOT NULL,
+    CompanyName nvarchar(40)  NOT NULL,
     AdressID int  NOT NULL,
-    NIP nvarchar(12)  NOT NULL UNIQUE,
+    NIP nvarchar(13)  NOT NULL UNIQUE,
     CONSTRAINT Companies_pk PRIMARY KEY CLUSTERED (CompanyID ASC),
 	CONSTRAINT NIP_format_check CHECK (NIP like '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]')
 );
@@ -155,7 +155,7 @@ CREATE TABLE Conference (
     ConferenceID int IDENTITY(1,1)  NOT NULL UNIQUE,
     Name varchar(50)  NOT NULL,
     AdressID int  NOT NULL,
-	StudentDiscount int NOT NULL DEFAULT 0,
+	StudentDiscount float NOT NULL DEFAULT 0,
     CONSTRAINT Conference_pk PRIMARY KEY  (ConferenceID)
 );
 
@@ -168,7 +168,6 @@ CREATE TABLE ConferenceDays (
     Date date  NOT NULL,
     Price float  NOT NULL,
     SeatsNum int  NOT NULL,
-	StudentDiscount float default 0,
     CONSTRAINT ConferenceDays_pk PRIMARY KEY  (ConfDayID),
 	CONSTRAINT SeatsNum_not_zero CHECK (SeatsNum>0)
 );
