@@ -110,9 +110,9 @@ CREATE INDEX ClientID on Clients (ClientID ASC,CompanyID ASC)
 
 CREATE TABLE Companies (
     CompanyID int IDENTITY(1,1) NOT NULL UNIQUE,
-    CompanyName nvarchar(20)  NOT NULL,
+    CompanyName nvarchar(40)  NOT NULL,
     AdressID int  NOT NULL,
-    NIP nvarchar(12)  NOT NULL UNIQUE,
+    NIP nvarchar(13)  NOT NULL UNIQUE,
     CONSTRAINT Companies_pk PRIMARY KEY CLUSTERED (CompanyID ASC),
 	CONSTRAINT NIP_format_check CHECK (NIP like '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]')
 );
@@ -185,7 +185,7 @@ CREATE TABLE Discounts (
     Discount float  NOT NULL DEFAULT 0,
     CONSTRAINT Discounts_pk PRIMARY KEY  (DiscountID),
 	CONSTRAINT Start_End_Discount_Date_check CHECK (DiscountStartDate<DiscountEndDate),
-	CONSTRAINT Discount_format_check CHECK (Discount between 1 and 99)
+	CONSTRAINT Discount_format_check CHECK (Discount between 0 and 1)
 );
 
 CREATE INDEX Discounts_idx_1 on Discounts (DiscountID ASC)
@@ -214,8 +214,7 @@ CREATE TABLE WorkshopRegistrations (
     WorkshopReservID int  NOT NULL,
     ParticipantID int  NOT NULL,
     ConfDayRegistrationID int  NOT NULL,
-    CONSTRAINT WorkshopRegistrations_pk PRIMARY KEY  (WorkshopRegID),
-	CONSTRAINT Participant_WorkShop_Reserv_unique UNIQUE (WorkshopRegID, ParticipantID)
+    CONSTRAINT WorkshopRegistrations_pk PRIMARY KEY  (WorkshopRegID)
 );
 
 CREATE INDEX WorkshopRegistrations_idx_1 on WorkshopRegistrations (WorkshopRegID ASC)
